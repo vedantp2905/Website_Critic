@@ -88,91 +88,81 @@ def capture_full_page_screenshots(url, output_folder):
         driver.quit()
 
 
-def analyze_all_screenshots(api_key,screenshot_paths):
+def analyze_all_screenshots(api_key, screenshot_paths):
     client = OpenAI(api_key=api_key)
     
     base64_images = []
-    for path in screenshot_paths:
+    for i, path in enumerate(screenshot_paths, start=1):
         with open(path, "rb") as image_file:
-            base64_images.append(base64.b64encode(image_file.read()).decode('utf-8'))
+            base64_images.append({
+                "index": i,
+                "data": base64.b64encode(image_file.read()).decode('utf-8')
+            })
     
     messages = [
-        
-    {
-        "role": "system",
-        "content": """You are an expert in website user interface (UI) and user experience (UX) design, as well as content analysis. Your task is to analyze screenshots of websites and provide detailed, structured reports on their UI/UX and content quality. Your analysis should be thorough and based on the following criteria:
+        {
+            "role": "system",
+            "content": """You are an expert in website user interface (UI) and user experience (UX) design, as well as content analysis. Your task is to analyze screenshots of websites and provide detailed, structured reports on their UI/UX and content quality. Your analysis should be thorough and based on the following criteria:
 
-        1. **UI/UX Evaluation**:
-            - **Navigation Structure and Usability**: Assess how easy it is to navigate the website, including menu design and link placement.
-            - **Layout and Visual Hierarchy**: Evaluate the arrangement of elements on the page and their visual importance.
-            - **Accessibility Features**: Identify any accessibility features present or missing, such as alt text for images, color contrast, and keyboard navigation.
-            - **Visual Design and Appeal**: Comment on the aesthetic aspects of the UI, including color schemes, typography, iconography, and overall design cohesion.
-            - **Interaction Design**: Analyze the responsiveness and feedback of interactive elements like buttons, forms, and hover effects.
-            - **Call-to-Action Effectiveness**: Examine the clarity, visibility, and placement of calls-to-action (CTAs).
-            - **Consistency**: Evaluate the consistency of UI elements across different sections of the website.
+            1. **UI/UX Evaluation**:
+                - Navigation Structure and Usability
+                - Layout and Visual Hierarchy
+                - Accessibility Features
+                - Visual Design and Appeal
+                - Interaction Design
+                - Call-to-Action Effectiveness
+                - Consistency
 
-        2. **Content Quality Assessment**:
-            - **Content Clarity and Readability**: Evaluate how clear and easy to read the content is, considering language, font size, and formatting.
-            - **Relevance to Target Audience**: Assess whether the content is appropriate and engaging for the intended audience.
-            - **Engagement Factors**: Review the tone and style of the content, as well as the use of multimedia (images, videos, etc.) to engage users.
-            - **Call-to-Action Effectiveness**: Check the effectiveness of CTAs in the content, their wording, and positioning.
-            - **Branding and Messaging Consistency**: Look for consistency in branding elements such as logos, color schemes, and messaging.
-            - **Content Organization and Structure**: Assess the logical flow and organization of the content, including headings, subheadings, and paragraphs.
+            2. **Content Quality Assessment**:
+                - Content Clarity and Readability
+                - Relevance to Target Audience
+                - Engagement Factors (tone, style, multimedia use)
+                - Call-to-Action Effectiveness
+                - Branding and Messaging Consistency
+                - Content Organization and Structure
 
-        For each criterion, clearly state any issues found, their potential impact on user interface, user experience, and content effectiveness, and provide actionable recommendations for improvement. The final report should include a summary of key findings, prioritization of issues based on impact and effort required to fix them, and suggested key performance indicators (KPIs) to track improvements."""
-    },
-        
+            For each point you make, clearly reference the specific screenshot number you're referring to. Your final report should include a summary of key findings, prioritization of issues based on impact and effort required to fix them, and suggested key performance indicators (KPIs) to track improvements."""
+        },
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": """Analyze these screenshots of a website for UI/UX and content.
-                 
-                Evaluate the user interface and user experience of the website. Provide a structured report with the following sections:
-                1. Navigation Structure and Usability
-                2. Layout and Visual Hierarchy
-                3. Accessibility Features
-                4. Visual Design and Appeal
-                5. Interaction Design
-                6. Call-to-Action Effectiveness
-                7. Consistency
-                For each section, clearly state the issues found and their potential impact on user interface and user experience.
-                Expected Output=A structured UI/UX evaluation report with clear sections, 
-                each detailing specific issues found and their potential impact on user interface and user experience.
-                
-                Assess the content quality and effectiveness of the website.
-                Provide a structured report with the following sections:
-                1. Content Clarity and Readability
-                2. Relevance to Target Audience
-                3. Engagement Factors (tone, style, multimedia use)
-                4. Call-to-Action Effectiveness
-                5. Branding and Messaging Consistency
-                6. Content Organization and Structure
-                For each section, clearly state the issues found and their potential impact on content effectiveness.
-                Expected Output=A structured content assessment report with clear sections, 
-                each detailing specific issues found and their potential impact on content effectiveness.
-                
-                Review the UI/UX evaluation and content assessment.
-                Create a comprehensive report that addresses all identified issues. Your report should:
-                1. Summarize key findings from each analysis (UI/UX and Content)
-                2. For each issue identified:
-                    a. Clearly state the problem
-                    b. Explain its impact on the website's performance
-                    c. Provide a specific, actionable solution
-                    d. Estimate the effort required (Low/Medium/High)
-                    e. Predict the potential impact of implementing the solution (Low/Medium/High)
-                3. Prioritize the solutions based on their potential impact and required effort
-                4. Propose an implementation timeline
-                5. Suggest key performance indicators to track improvement
-                expected_output=A structured content assessment report with clear sections, 
-                each detailing specific issues found and their potential impact on content effectiveness.
-                
-                Also tell me total number of images analyzed by you"""},
-            ] + [{"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img}"}} for img in base64_images]
+                {"type": "text", "text": """Analyze these screenshots of a website for UI/UX and content. For each point you make, reference the specific screenshot number you're referring to.
+
+                1. Evaluate the user interface and user experience of the website:
+                   - Navigation Structure and Usability
+                   - Layout and Visual Hierarchy
+                   - Accessibility Features
+                   - Visual Design and Appeal
+                   - Interaction Design
+                   - Call-to-Action Effectiveness
+                   - Consistency
+
+                2. Assess the content quality and effectiveness of the website:
+                   - Content Clarity and Readability
+                   - Relevance to Target Audience
+                   - Engagement Factors (tone, style, multimedia use)
+                   - Branding and Messaging Consistency
+                   - Content Organization and Structure
+
+                3. Provide a comprehensive report that:
+                   - Summarizes key findings from each analysis (UI/UX and Content)
+                   - For each issue identified:
+                     a. Clearly state the problem and reference the relevant screenshot(s)
+                     b. Explain its impact on the website's performance
+                     c. Provide a specific, actionable solution
+                     d. Estimate the effort required (Low/Medium/High)
+                     e. Predict the potential impact of implementing the solution (Low/Medium/High)
+                   - Prioritize the solutions based on their potential impact and required effort
+                   - Propose an implementation timeline
+                   - Suggest key performance indicators to track improvement
+
+                Remember to reference specific screenshot numbers for each point you make in your analysis."""},
+            ] + [{"type": "image_url", "image_url": {"url": f"data:image/png;base64,{img['data']}"}} for img in base64_images]
         }
     ]
     
     response = client.chat.completions.create(
-        model="gpt-4o", # Make sure to use a vision-capable model
+        model="gpt-4o",
         messages=messages,
         max_tokens=4000,
     )
@@ -186,43 +176,61 @@ def main():
     # Initialize session state
     if 'generated_content' not in st.session_state:
         st.session_state.generated_content = None
+    if 'screenshots' not in st.session_state:
+        st.session_state.screenshots = None
 
     with st.sidebar:
         with st.form('OpenAI'):
             api_key = st.text_input('Enter your OpenAI API key', type="password")
             submitted = st.form_submit_button("Submit")
 
-
     if api_key:
-        
         url = st.text_input("Enter your URL")
         
         if st.button("Critique It!"):
             with st.spinner("Capturing screenshots..."):
                 output_folder = "webpage_screenshots"
                 screenshot_paths = capture_full_page_screenshots(url, output_folder)
+                st.session_state.screenshots = screenshot_paths
             
             with st.spinner("Critiquing..."):
-                st.session_state.generated_content = analyze_all_screenshots(api_key,screenshot_paths)
+                st.session_state.generated_content = analyze_all_screenshots(api_key, screenshot_paths)
+
+        # Display screenshots
+        if st.session_state.screenshots:
+            st.subheader("Screenshots")
+            cols = st.columns(3)
+            for i, screenshot_path in enumerate(st.session_state.screenshots):
+                with cols[i % 3]:
+                    st.image(screenshot_path, caption=f"Screenshot {i+1}", use_column_width=True)
 
         # Display content if it exists in session state
         if st.session_state.generated_content:
+            st.subheader("AI Critique")
             st.markdown(st.session_state.generated_content)
 
             doc = Document()
 
-            # Option to download content as a Word document
+            # Add URL to the document
             doc.add_heading(url, 0)
+
+            # Add AI-generated content to the document
             doc.add_paragraph(st.session_state.generated_content)
+
+            # Add screenshots to the document
+            doc.add_heading("Screenshots", level=1)
+            for i, screenshot_path in enumerate(st.session_state.screenshots):
+                doc.add_picture(screenshot_path, width=docx.shared.Inches(6))
+                doc.add_paragraph(f"Screenshot {i+1}")
 
             buffer = BytesIO()
             doc.save(buffer)
             buffer.seek(0)
 
             st.download_button(
-                label="Download as Word Document",
+                label="Download Report with Screenshots",
                 data=buffer,
-                file_name=f"{url}.docx",
+                file_name=f"{url}_critique_with_screenshots.docx",
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
 
