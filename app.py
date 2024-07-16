@@ -6,9 +6,7 @@ from docx import Document
 from io import BytesIO
 import asyncio
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import ScrapeWebsiteTool, tool
 from langchain_openai import ChatOpenAI
-from openai import OpenAI
 import streamlit as st
 from selenium import webdriver
 from selenium.webdriver.common.by import By
