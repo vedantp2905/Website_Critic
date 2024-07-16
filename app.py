@@ -100,14 +100,16 @@ def analyze_all_screenshots(api_key,screenshot_paths):
         
     {
         "role": "system",
-        "content": """You are an expert in website user experience (UX) and content analysis. Your task is to analyze screenshots of websites and provide detailed, structured reports on their user experience and content quality. Your analysis should be thorough and based on the following criteria:
+        "content": """You are an expert in website user interface (UI) and user experience (UX) design, as well as content analysis. Your task is to analyze screenshots of websites and provide detailed, structured reports on their UI/UX and content quality. Your analysis should be thorough and based on the following criteria:
 
-        1. **UX Evaluation**:
+        1. **UI/UX Evaluation**:
             - **Navigation Structure and Usability**: Assess how easy it is to navigate the website, including menu design and link placement.
             - **Layout and Visual Hierarchy**: Evaluate the arrangement of elements on the page and their visual importance.
             - **Accessibility Features**: Identify any accessibility features present or missing, such as alt text for images, color contrast, and keyboard navigation.
-            - **Visual Appeal**: Comment on the aesthetic aspects of the website, including color schemes, typography, and overall design.
-            - **Call-to-Action Effectiveness**: Examine the clarity and visibility of calls-to-action (CTAs) and their placement.
+            - **Visual Design and Appeal**: Comment on the aesthetic aspects of the UI, including color schemes, typography, iconography, and overall design cohesion.
+            - **Interaction Design**: Analyze the responsiveness and feedback of interactive elements like buttons, forms, and hover effects.
+            - **Call-to-Action Effectiveness**: Examine the clarity, visibility, and placement of calls-to-action (CTAs).
+            - **Consistency**: Evaluate the consistency of UI elements across different sections of the website.
 
         2. **Content Quality Assessment**:
             - **Content Clarity and Readability**: Evaluate how clear and easy to read the content is, considering language, font size, and formatting.
@@ -117,23 +119,25 @@ def analyze_all_screenshots(api_key,screenshot_paths):
             - **Branding and Messaging Consistency**: Look for consistency in branding elements such as logos, color schemes, and messaging.
             - **Content Organization and Structure**: Assess the logical flow and organization of the content, including headings, subheadings, and paragraphs.
 
-        For each criterion, clearly state any issues found, their potential impact on user experience and content effectiveness, and provide actionable recommendations for improvement. The final report should include a summary of key findings, prioritization of issues based on impact and effort required to fix them, and suggested key performance indicators (KPIs) to track improvements."""
+        For each criterion, clearly state any issues found, their potential impact on user interface, user experience, and content effectiveness, and provide actionable recommendations for improvement. The final report should include a summary of key findings, prioritization of issues based on impact and effort required to fix them, and suggested key performance indicators (KPIs) to track improvements."""
     },
         
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": """Analyze these screenshots of a website for UX and content.
+                {"type": "text", "text": """Analyze these screenshots of a website for UI/UX and content.
                  
-                Evaluate the user experience of the website. Provide a structured report with the following sections:
+                Evaluate the user interface and user experience of the website. Provide a structured report with the following sections:
                 1. Navigation Structure and Usability
                 2. Layout and Visual Hierarchy
                 3. Accessibility Features
-                4. Visual Appeal
-                5. Call-to-Action Effectiveness
-                For each section, clearly state the issues found and their potential impact on user experience.
-                Expected Output=A structured UX evaluation report with clear sections, 
-                each detailing specific issues found and their potential impact on user experience.
+                4. Visual Design and Appeal
+                5. Interaction Design
+                6. Call-to-Action Effectiveness
+                7. Consistency
+                For each section, clearly state the issues found and their potential impact on user interface and user experience.
+                Expected Output=A structured UI/UX evaluation report with clear sections, 
+                each detailing specific issues found and their potential impact on user interface and user experience.
                 
                 Assess the content quality and effectiveness of the website.
                 Provide a structured report with the following sections:
@@ -147,9 +151,9 @@ def analyze_all_screenshots(api_key,screenshot_paths):
                 Expected Output=A structured content assessment report with clear sections, 
                 each detailing specific issues found and their potential impact on content effectiveness.
                 
-                Review the UX evaluationand content assessment.
+                Review the UI/UX evaluation and content assessment.
                 Create a comprehensive report that addresses all identified issues. Your report should:
-                1. Summarize key findings from each analysis (UX and Content)
+                1. Summarize key findings from each analysis (UI/UX and Content)
                 2. For each issue identified:
                     a. Clearly state the problem
                     b. Explain its impact on the website's performance
