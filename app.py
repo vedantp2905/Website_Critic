@@ -39,7 +39,7 @@ def capture_full_page_screenshots(url, output_folder):
     options.add_argument("--disable-gpu")
     options.add_argument("--headless")
 
-    driver = return webdriver.Chrome(
+    driver = webdriver.Chrome(
         service=Service(
             ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
         ),
