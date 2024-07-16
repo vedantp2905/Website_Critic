@@ -1,2 +1,2 @@
-chromium
-chromiumedge-driver
+chromiumedge
+chromium-driver
