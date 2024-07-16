@@ -17,7 +17,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from PIL import Image
 import io
 
-@st.cache_resource
 def get_driver(options):
     return webdriver.Chrome(
         service=Service(
