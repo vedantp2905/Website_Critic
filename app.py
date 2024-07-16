@@ -11,80 +11,56 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from PIL import Image
 import io
 
-
-def capture_full_page_screenshots(url, output_folder):
-    # Delete the output folder if it already exists
-    if os.path.exists(output_folder):
-        shutil.rmtree(output_folder)
-    
-    # Create the output folder
-    os.makedirs(output_folder)
-
+@st.cache_resource
+def get_driver():
     options = Options()
     options.add_argument("--disable-gpu")
     options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     
-    # Set up the webdriver (Chromium in this example)
-    driver = webdriver.Chrome(
-            service=Service(
-                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-            ),
-            options=options,
-        )
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options,
+    )
+
+def capture_full_page_screenshots(url, output_folder):
+    if os.path.exists(output_folder):
+        shutil.rmtree(output_folder)
+    
+    os.makedirs(output_folder)
+    
+    driver = get_driver()
     
     try:
-        # Open the URL
         driver.get(url)
-        
-        # Wait for the page to load
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        
-        # Get the page dimensions
         total_height = driver.execute_script("return document.body.scrollHeight")
         viewport_height = driver.execute_script("return window.innerHeight")
-        
-        # Calculate the number of screenshots needed
         num_screenshots = total_height // viewport_height + 1
-        
         screenshot_paths = []
-        
+
         for i in range(num_screenshots):
-            # Calculate scroll position
             scroll_height = i * viewport_height
             if i > 0:
-                scroll_height -= 100  # Overlap by 100 pixels
-            
-            # Scroll to position
+                scroll_height -= 100
             driver.execute_script(f"window.scrollTo(0, {scroll_height});")
-            
-            # Wait for any dynamic content to load
             time.sleep(1)
-            
-            # Capture the screenshot
             screenshot = driver.get_screenshot_as_base64()
             img_data = base64.b64decode(screenshot)
             img = Image.open(io.BytesIO(img_data))
-            
-            # Save the screenshot
             filename = f"screenshot_{i+1:03d}.png"
             file_path = os.path.join(output_folder, filename)
             img.save(file_path)
             screenshot_paths.append(file_path)
-            
-            print(f"Captured and saved screenshot {i+1} of {num_screenshots}")
-        
-        print(f"All screenshots saved in folder: {output_folder}")
         
         return screenshot_paths
-        
     finally:
-        # Close the browser
         driver.quit()
 
 
