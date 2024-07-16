@@ -18,7 +18,21 @@ from PIL import Image
 import io
 import docx
 
-
+def validate_gpt_api_key(api_key):
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    
+    # Using a simple request to the models endpoint
+    response = requests.get("https://api.openai.com/v1/models", headers=headers)
+    
+    if response.status_code == 200:
+        return("API key is valid.")
+    elif response.status_code == 401:
+        return("API key is INVALID.")
+    else:
+        return(f"Unexpected status code: {response.status_code}")
 
 def capture_full_page_screenshots(url, output_folder):
     # Delete the output folder if it already exists
@@ -186,8 +200,11 @@ def main():
         with st.form('OpenAI'):
             api_key = st.text_input('Enter your OpenAI API key', type="password")
             submitted = st.form_submit_button("Submit")
+            if submitted:
+                validity = validate_gpt_api_key(api_key)
+                st.write(validity)
 
-    if api_key:
+    if validity == 'API key is valid.':
         url = st.text_input("Enter your URL")
         
         if st.button("Critique It!"):
@@ -209,7 +226,7 @@ def main():
 
         # Display content if it exists in session state
         if st.session_state.generated_content:
-            st.markdown(st.session_state.generated_content)
+            st.writ(st.session_state.generated_content)
 
             doc = Document()
 
