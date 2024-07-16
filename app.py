@@ -172,7 +172,7 @@ def analyze_all_screenshots(api_key,screenshot_paths):
     ]
     
     response = client.chat.completions.create(
-        model="gpt-4-turbo", # Make sure to use a vision-capable model
+        model="gpt-4o", # Make sure to use a vision-capable model
         messages=messages,
         max_tokens=4000,
     )
