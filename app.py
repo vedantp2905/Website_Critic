@@ -8,10 +8,15 @@ from openai import OpenAI
 import streamlit as st
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from PIL import Image
 import io
+
 
 def capture_full_page_screenshots(url, output_folder):
     # Delete the output folder if it already exists
@@ -21,8 +26,17 @@ def capture_full_page_screenshots(url, output_folder):
     # Create the output folder
     os.makedirs(output_folder)
 
+    options = Options()
+    options.add_argument("--disable-gpu")
+    options.add_argument("--headless")
+    
     # Set up the webdriver (Chromium in this example)
-    driver = webdriver.ChromiumEdge()
+    driver = webdriver.Chrome(
+            service=Service(
+                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ),
+            options=options,
+        )
     
     try:
         # Open the URL
