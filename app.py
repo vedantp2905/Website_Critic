@@ -201,7 +201,6 @@ def main():
 
         # Display screenshots
         if st.session_state.screenshots:
-            st.subheader("Screenshots")
             cols = st.columns(3)
             for i, screenshot_path in enumerate(st.session_state.screenshots):
                 with cols[i % 3]:
