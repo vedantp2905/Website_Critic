@@ -201,6 +201,7 @@ def main():
 
         # Display screenshots
         if st.session_state.screenshots:
+            st.subheader("Screenshots")
             cols = st.columns(3)
             for i, screenshot_path in enumerate(st.session_state.screenshots):
                 with cols[i % 3]:
@@ -208,7 +209,6 @@ def main():
 
         # Display content if it exists in session state
         if st.session_state.generated_content:
-            st.subheader("AI Critique")
             st.markdown(st.session_state.generated_content)
 
             doc = Document()
