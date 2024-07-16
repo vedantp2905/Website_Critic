@@ -187,7 +187,6 @@ def analyze_all_screenshots(api_key, screenshot_paths):
     return response.choices[0].message.content
 
 # Streamlit web application
-# Streamlit web application
 def main():
     st.header('AI Website UX and Content Critic')
     
@@ -196,6 +195,8 @@ def main():
         st.session_state.generated_content = None
     if 'screenshots' not in st.session_state:
         st.session_state.screenshots = None
+    
+    validity=''
 
     with st.sidebar:
         with st.form('OpenAI'):
