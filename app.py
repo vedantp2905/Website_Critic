@@ -17,7 +17,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from PIL import Image
 import io
 
-
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(
+        service=Service(
+            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+        ),
+        options=options,
+    )
+    
 def capture_full_page_screenshots(url, output_folder):
     # Delete the output folder if it already exists
     if os.path.exists(output_folder):
@@ -26,17 +34,12 @@ def capture_full_page_screenshots(url, output_folder):
     # Create the output folder
     os.makedirs(output_folder)
 
+    
     options = Options()
     options.add_argument("--disable-gpu")
     options.add_argument("--headless")
-    
     # Set up the webdriver (Chromium in this example)
-    driver = webdriver.Chrome(
-            service=Service(
-                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-            ),
-            options=options,
-        )
+    driver = get_driver()
     
     try:
         # Open the URL
