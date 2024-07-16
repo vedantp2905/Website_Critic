@@ -16,6 +16,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from PIL import Image
 import io
+import docx
+
 
 
 def capture_full_page_screenshots(url, output_folder):
