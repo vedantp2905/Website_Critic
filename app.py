@@ -21,8 +21,8 @@ def capture_full_page_screenshots(url, output_folder):
     # Create the output folder
     os.makedirs(output_folder)
 
-    # Set up the webdriver (Chrome in this example)
-    driver = webdriver.Chrome()
+    # Set up the webdriver (Chromium in this example)
+    driver = webdriver.ChromiumEdge()
     
     try:
         # Open the URL
