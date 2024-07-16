@@ -1,9 +1,5 @@
 streamlit
 python-docx
-crewai
-duckduckgo_search
-langchain-google-genai
-replicate
 openai
 langchain-core
 pysqlite3-binary
