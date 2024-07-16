@@ -187,6 +187,7 @@ def analyze_all_screenshots(api_key, screenshot_paths):
     return response.choices[0].message.content
 
 # Streamlit web application
+# Streamlit web application
 def main():
     st.header('AI Website UX and Content Critic')
     
