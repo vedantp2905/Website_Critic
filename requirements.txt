@@ -7,4 +7,5 @@ replicate
 openai
 langchain-core
 pysqlite3-binary
-selenium
+seleniumbase
+webdriver-manager
