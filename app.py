@@ -19,7 +19,7 @@ import io
 import requests
 import docx
 
-def validate_gpt_api_key(api_key):
+def verify_gpt_api_key(api_key):
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
@@ -29,11 +29,14 @@ def validate_gpt_api_key(api_key):
     response = requests.get("https://api.openai.com/v1/models", headers=headers)
     
     if response.status_code == 200:
-        return("API key is valid.")
+        print("API key is valid.")
+        return True
     elif response.status_code == 401:
-        return("API key is INVALID.")
+        print("API key is invalid.")
+        return False
     else:
-        return(f"Unexpected status code: {response.status_code}")
+        print(f"Unexpected status code: {response.status_code}")
+        return False
 
 def capture_full_page_screenshots(url, output_folder):
     # Delete the output folder if it already exists
@@ -204,10 +207,13 @@ def main():
             api_key = st.text_input('Enter your OpenAI API key', type="password")
             submitted = st.form_submit_button("Submit")
             if submitted:
-                validity = validate_gpt_api_key(api_key)
-                st.write(validity)
+                validity = verify_gpt_api_key(api_key)
+                if validity ==True:
+                    st.write("Valid API key")
+                else:
+                    st.write("Invalid API key")
 
-    if validity == 'API key is valid.':
+    if validity == True:
         url = st.text_input("Enter your URL")
         
         if st.button("Critique It!"):
