@@ -1,7 +1,7 @@
-streamlit
+streamlit==1.36.0
 python-docx
-openai
-langchain-core
+openai==1.31.0
+langchain-core==0.1.52
 pysqlite3-binary
-seleniumbase
-webdriver-manager
+seleniumbase==4.28.7
+webdriver-manager==5.9.1
