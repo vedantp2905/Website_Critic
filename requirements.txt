@@ -4,4 +4,4 @@ openai==1.31.0
 langchain-core==0.1.52
 pysqlite3-binary
 seleniumbase==4.28.7
-webdriver-manager==5.9.1
+webdriver-manager==4.0.1
